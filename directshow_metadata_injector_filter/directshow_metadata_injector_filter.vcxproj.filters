@@ -23,7 +23,7 @@
     <ClInclude Include="lavfilters_side_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="directshow_metadata_injector_filter.h">
+    <ClInclude Include="metadata_injector_filter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="guids.h">
@@ -34,7 +34,7 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="directshow_metadata_injector_filter.cpp">
+    <ClCompile Include="metadata_injector_filter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

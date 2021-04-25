@@ -172,12 +172,12 @@
     <None Include="directshow_metadata_injector_filter.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="directshow_metadata_injector_filter.h" />
+    <ClInclude Include="metadata_injector_filter.h" />
     <ClInclude Include="guids.h" />
     <ClInclude Include="lavfilters_side_data.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="directshow_metadata_injector_filter.cpp" />
+    <ClCompile Include="metadata_injector_filter.cpp" />
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

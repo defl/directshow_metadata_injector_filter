@@ -1,10 +1,12 @@
 #pragma once
+
 #include <streams.h>
 
 /**
- * Directshow filter which force-sets HDR metadata.
+ * Directshow filter which can inject/overwrite existing meta data.
+ * Focused on HDR, WCG applications.
  */
-class ForceHDRFilter:
+class MetadataInjectorFilter:
 	public CTransformFilter
 {
 public:
@@ -26,8 +28,7 @@ public:
 private:
 
     // Constructor
-    ForceHDRFilter(TCHAR* tszName, LPUNKNOWN punk, HRESULT* phr);
-    virtual ~ForceHDRFilter() {}
+    MetadataInjectorFilter(TCHAR* tszName, LPUNKNOWN punk, HRESULT* phr);
 
     // Make destination an identical copy of source
     HRESULT Copy(IMediaSample* pSource, IMediaSample* pDest) const;
