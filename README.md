@@ -22,6 +22,7 @@ With this and a select few other bits and bobs you can build something like a po
 	* HDR Transfer Matrix (BT.2020 etc)
 	* HDR Primaries (DCI-P3, BT.2020 etc)
 	* HDR Video transfer function (SMPTE ST 2084 (PQ), HLG etc)
+* Configuration through an ini file (default in same directory)
 * Tested players
     * Potplayer
 * Tested DirectShow sources
@@ -46,21 +47,35 @@ Potplayer
 
 *(If you're running a AVerMedia Live Gamer 4K - GC573 don't forget to set it's output to P010 for 10bit, you can do this in preferences under device->webcam->format, see [here](images/potplayer_avermedia_settings.png))*
 
+## Configuration
+
+Configuration is via a .ini file which contains all the settings. There is an example_config.ini._
+
+There is a small Python program included in the python/ subdir which can automatically generate this file for a range of devices. For this to work you need
+to place the device before the input to the capture server (you want to do this anyway because higher end audio is notriously poor though such setups). This 
+way the device will see the same HDR meta data as the capture card and the filter can inject the correct metadata in the directshow stream. The config is 
+re-generated every few seconds and a quick stop-start will reload everything and get you the right parameters (after a menu-switch or a new movie starts for 
+example).
+
+Supported devices:
+
+ * HDFury Vertex2
+
+
 ## Build
 
-Open with Visual Studio 2019 VC++, should just work out of the box.
+**C++**: Open with Visual Studio 2019 VC++, should just work out of the box.
+
+**Python**: Just have a python 3.x interpretor and install the packages mentioned in requirements.txt
 
 ## FAQ
 
 Is this plug and play? No, because this filter does not offer anything new to get an video stream decoded it will not automatically be added to a DirectShow graph. It needs to be forced to be included, see install for an example.
 
-
 ## Credits
 
-Thanks to WP for the initial introduction to DirectShow 
+ * Thanks to WP for the initial introduction to DirectShow 
+ * Thanks to Hendrik Leppkes' for his excellent [LAV](https://github.com/Nevcairiel/LAVFilters/releases) filter.
+ * Thanks to madshi for [madVR](http://madvr.com/).
 
-Thanks to Hendrik Leppkes' for his excellent [LAV](https://github.com/Nevcairiel/LAVFilters/releases) filter.
-
-Thanks to madshi for [madVR](http://madvr.com/).
-
-No thanks to all capture card manufacturers who are willing to sell you half implemented hardware.
+No thanks to all capture card manufacturers who are willing to sell you half implemented software on their hardware.

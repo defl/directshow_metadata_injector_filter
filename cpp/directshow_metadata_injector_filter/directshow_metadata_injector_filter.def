@@ -1,4 +1,4 @@
-LIBRARY     DSVI2Faker.dll
+LIBRARY     directshow_metadata_injector_filter.ax
 
 EXPORTS
             DllMain                 PRIVATE
