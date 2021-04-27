@@ -60,7 +60,7 @@ Notes:
  * Note that in some jurisdictions it's allowed to remove HDCP for the right reasons. This is not hard, but figuring out how to do this is left as an exercise to the reader.
  * The hdfury_virtex2_ini_generator.py connects to the fury and updates the filter's config ever 10 seconds. Restarting potplayer will engage the new settings.
 
-If you like this, and have the means, please buy a real (envy)[https://madvrenvy.com/] to support further madVR development. It is really, really a much better experience.
+If you like this, and have the means, please buy a real [envy](https://madvrenvy.com/) to support further madVR development. It is really, really a much better experience.
 
 ## Configuration
 
