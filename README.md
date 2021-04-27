@@ -9,8 +9,6 @@ data but refuse to forward the correct HDR metdata through their DirectShow sour
 This leads to downstream renderers making a mess of the picture as they don't know how to interpret it.
 Example [before](images/without.png) and [after](images/with.png) screenshots probably speak for themselves.
 
-With this and a select few other bits and bobs you can build something like a poor mans' [madVR labs envy](https://madvrenvy.com/) if you're willing to forego the updates, ease of use and potential HDCP issues. If you like this, and have the means, please buy a real envy to support further madVR development.
-
 ## Features
 
 * Supported metadata
@@ -52,6 +50,16 @@ optional: hdfury_virtex2_ini_generator.py
 * Install Python
 * Install python/requirements.txt modules
 * Run hdfury_virtex2_ini_generator.py <ip of vertex2> <directshow_metadata_injector_filter.ini file from above>
+
+## Poor mans' madVRlabs Envy?
+
+Schematically this looks like: source (Apple TV4k or blueray player) -> HDFurty Vertex2 -> HTPC (madVR, nvidia GPU, capture card) -> display
+
+Notes:
+ * The sound you want to run off of the Vertex2 split to a processor/receiver if you plan on running any sort of interesting format like Atmos. Beware that delay might be high (>200ms) so get one that can handle it.
+ * Note that in some jurisdictions it's allowed to remove HDCP for the right reasons. This is not hard, but figuring out how to do this is left as an exercise to the reader.
+
+If you like this, and have the means, please buy a real (envy)[https://madvrenvy.com/] to support further madVR development. It is really, really a much better experience.
 
 ## Configuration
 
