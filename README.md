@@ -1,7 +1,5 @@
 # [DirectShow Metadata Injector Filter](https://github.com/defl/directshow_metadata_injector_filter)
 
-**Warning: This is not feature complete yet - there is no way to configure without recompiling**
-
 This is a DirectShow filter that can inject metadata related to high dynamic range (HDR) and wide color gamut (WCG) 
 into a directshow graph.
 
