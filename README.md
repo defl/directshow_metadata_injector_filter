@@ -24,16 +24,19 @@ With this and a select few other bits and bobs you can build something like a po
 * Tested players
     * Potplayer
 * Tested DirectShow sources
-	* AVerMedia Live Gamer 4K - GC573
+    * AVerMedia Live Gamer 4K - GC573
+    * Blackmagic Design DeckLink Mini Recorder 4K
 * Tested DirectShow renderers
     * madVR
 
 ## Install
 
+* Install VS2019 x64 runtime
+* Download directshow_metadata_injector_filter.ax to a location you will not delete (and which is not admin only under windows like program files)
+* Copy the example_config.ini as directshow_metadata_injector_filter.ini to the same dir
+
 Potplayer
 
-* Download directshow_metadata_injector_filter.ax to a location you will not delete
-* Install VS2019 runtime
 * Open potplayer
 * Open preferences (F5)
 * In the tree menu go to: Filter Control -> Filter Priority (Overall) ([screenshot](images/potplayer_settings.png))
@@ -42,8 +45,13 @@ Potplayer
 * There should be a new filter in the Custom Filter Manager called "Metadata Injector"
 * Select Metadata Injector
 * Bottom right of screen set priority to "Prefer"
-
 *(If you're running a AVerMedia Live Gamer 4K - GC573 don't forget to set it's output to P010 for 10bit, you can do this in preferences under device->webcam->format, see [here](images/potplayer_avermedia_settings.png))*
+
+optional: hdfury_virtex2_ini_generator.py
+
+* Install Python
+* Install python/requirements.txt modules
+* Run hdfury_virtex2_ini_generator.py <ip of vertex2> <directshow_metadata_injector_filter.ini file from above>
 
 ## Configuration
 
