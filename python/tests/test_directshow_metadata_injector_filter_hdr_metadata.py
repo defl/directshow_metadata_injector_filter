@@ -1,6 +1,6 @@
 import unittest
 
-from directshow_metadata_injector_filter.hdr_metadata import HDRMetaData
+from directshow_metadata_injector_filter.hdr_metadata import HDRMetaData, PrimaryColorSpace
 
 
 class TestHDRMetaData(unittest.TestCase):
@@ -8,7 +8,7 @@ class TestHDRMetaData(unittest.TestCase):
     def test_getters(self):
         hdr = HDRMetaData("87:01:1A:90:02:00:34:21:AA:9B:96:19:FC:08:48:8A:08:39:13:3D:42:40:E8:03:32:00:F7:03:83:00:00")
 
-        self.assertEqual(2, hdr.etof())
+        self.assertEqual(2, hdr.eotf())
 
         self.assertAlmostEqual(0.3127, hdr.whitepoint_x())
         self.assertAlmostEqual(0.329, hdr.whitepoint_y())
@@ -25,3 +25,5 @@ class TestHDRMetaData(unittest.TestCase):
         self.assertAlmostEqual(0.046, hdr.display_primary_blue_y())
         self.assertAlmostEqual(0.708, hdr.display_primary_red_x())
         self.assertAlmostEqual(0.292, hdr.display_primary_red_y())
+
+        self.assertEqual(PrimaryColorSpace.BT2020, hdr.primary_color_space())
