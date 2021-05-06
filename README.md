@@ -58,13 +58,13 @@ Schematically this looks like: source (Apple TV4k or blueray player) -> HDFurty 
 Notes:
  * The sound you want to run off of the Vertex2 split to a processor/receiver if you plan on running any sort of interesting format like Atmos. Beware that delay might be high (>200ms) so get one that can handle it.
  * Note that in some jurisdictions it's allowed to remove HDCP for the right reasons. This is not hard, but figuring out how to do this is left as an exercise to the reader.
- * The hdfury_virtex2_ini_generator.py connects to the fury and updates the filter's config ever 10 seconds. Restarting potplayer will engage the new settings.
+ * The hdfury_virtex2_ini_generator.py connects to the fury and updates the filter's config ever 10 seconds. A stop-start of the stream in potplayer will engage the new settings.
 
 If you like this, and have the means, please buy a real [envy](https://madvrenvy.com/) to support further madVR development. It is really, really a much better experience.
 
 ## Configuration
 
-Configuration is via a .ini file which contains all the settings. There is an example_config.ini._
+Configuration is via a .ini file which contains all the settings. There is an example_config.ini. Copy that to the same location as where you downloaded the .ax file and rename to directshow_metadata_injector_filter.ini.
 
 There is a small Python program included in the python/ subdir which can automatically generate this file for a range of devices. For this to work you need
 to place the device before the input to the capture server (you want to do this anyway because higher end audio is notriously poor though such setups). This 
