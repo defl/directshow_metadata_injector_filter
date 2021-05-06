@@ -140,8 +140,8 @@ HRESULT MetadataInjectorFilter::Transform(IMediaSample* pIn, IMediaSample* pOut)
             hdr.white_point_x = mWhitePointX;
             hdr.white_point_y = mWhitePointY;
 
-            hdr.max_display_mastering_luminance = mMasteringLuminanceMin;
-            hdr.min_display_mastering_luminance = mMasteringLuminanceMax;
+            hdr.max_display_mastering_luminance = mMasteringLuminanceMax;
+            hdr.min_display_mastering_luminance = mMasteringLuminanceMin;
             pMediaSideData->SetSideData(IID_MediaSideDataHDR, (const BYTE*)&hdr, sizeof(hdr));
         }
 
@@ -463,7 +463,6 @@ HRESULT MetadataInjectorFilter::ReadFromStream(IStream* pStream)
     mConfigFilename = temp;
 
     return NOERROR;
-
 }
 
 
