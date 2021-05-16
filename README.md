@@ -6,6 +6,8 @@ It is usable for sources which do not properly relay this information like consu
 
 Example [before](images/without.png) and [after](images/with.png) screenshots probably speak for themselves.
 
+This filter has a big bother called [VideoProcessor](http://www.videoprocessor.org/) (code at [defl/videoprocessor](https://github.com/defl/videoprocessor)) which is a Windows application that the capture, metadata generation and rendering into one application for total ease of use, full control and highest possible quality.
+
 # Features
 
 * Supported metadata
