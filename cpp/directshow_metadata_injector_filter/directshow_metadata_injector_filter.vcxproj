@@ -175,6 +175,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\example_config.ini" />
     <None Include="directshow_metadata_injector_filter.def" />
   </ItemGroup>
   <ItemGroup>

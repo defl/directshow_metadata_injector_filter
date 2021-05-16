@@ -60,5 +60,8 @@
     <None Include="directshow_metadata_injector_filter.def">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="..\..\example_config.ini">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

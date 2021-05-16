@@ -61,21 +61,22 @@ private:
 
     std::string mConfigFilename;
 
-    bool mSendSideData = true;
-    
+    unsigned int mFramesPerSecond = 0;
+    unsigned int mFrameCounter = 0;
+
     double mDisplayPrimaryGreenX;
     double mDisplayPrimaryBlueX;
     double mDisplayPrimaryRedX;
     double mDisplayPrimaryGreenY;
     double mDisplayPrimaryBlueY;
     double mDisplayPrimaryRedY;
-    
+
     double mWhitePointX;
     double mWhitePointY;
-    
+
     double mMasteringLuminanceMin;
     double mMasteringLuminanceMax;
-    
+
     unsigned int mMaxCLL;
     unsigned int mMaxFALL;
 

@@ -1,39 +1,41 @@
 # [DirectShow Metadata Injector Filter](https://github.com/defl/directshow_metadata_injector_filter)
 
-This is a DirectShow filter that can inject metadata related to high dynamic range (HDR) and wide color gamut (WCG) 
-into a directshow graph.
+This is a DirectShow filter that can inject metadata related to high dynamic range (HDR) and wide color gamut (WCG) the graph so it can be used by capable renderers like [madVR](http://madvr.com/).
 
-This is usable for sources which do not properly relay this information like consumer video capture cards 
-[AVerMedia Live Gamer 4K - GC573](https://www.avermedia.com/us/product-detail/GC573) who technically do HDR 
-data but refuse to forward the correct HDR metdata through their DirectShow source filters. 
-This leads to downstream renderers making a mess of the picture as they don't know how to interpret it.
+It is usable for sources which do not properly relay this information like consumer video capture cards such as the [AVerMedia Live Gamer 4K - GC573](https://www.avermedia.com/us/product-detail/GC573) who technically do HDR data but refuse to forward the correct HDR metadata through their DirectShow source filters. This leads to downstream renderers making a mess of the picture as they don't know how to interpret it.
+
 Example [before](images/without.png) and [after](images/with.png) screenshots probably speak for themselves.
 
-## Features
+# Features
 
 * Supported metadata
-    * HDR primaries & whitepoint as xy coordinates
+    * HDR primaries & whitepoint as CIE1931 xy coordinates
 	* HDR min/max mastering luminance
 	* HDR content light levels (MaxCLL, MaxFALL)
 	* HDR Transfer Matrix (BT.2020 etc)
 	* HDR Primaries (DCI-P3, BT.2020 etc)
 	* HDR Video transfer function (SMPTE ST 2084 (PQ), HLG etc)
-* Configuration through an ini file (default in same directory)
+* Configuration through an .ini file (by default in same directory)
 * Tested players
     * Potplayer
 * Tested DirectShow sources
     * AVerMedia Live Gamer 4K - GC573
-    * Blackmagic Design DeckLink Mini Recorder 4K
 * Tested DirectShow renderers
     * madVR
+    
+    
 
-## Install
+# Install
 
 * Install VS2019 x64 runtime
+
 * Download directshow_metadata_injector_filter.ax to a location you will not delete (and which is not admin only under windows like program files)
+
 * Copy the example_config.ini as directshow_metadata_injector_filter.ini to the same dir
 
-Potplayer
+  
+
+**Potplayer**
 
 * Open potplayer
 * Open preferences (F5)
@@ -45,47 +47,45 @@ Potplayer
 * Bottom right of screen set priority to "Prefer"
 *(If you're running a AVerMedia Live Gamer 4K - GC573 don't forget to set it's output to P010 for 10bit, you can do this in preferences under device->webcam->format, see [here](images/potplayer_avermedia_settings.png))*
 
-optional: hdfury_virtex2_ini_generator.py
+
+
+# Configuration
+
+Configuration is via a .ini file which contains all the settings. There is an example_config.ini in the project's code repo. Copy that to the same location as where you downloaded the .ax file and rename to directshow_metadata_injector_filter.ini. The settings are well documented and speak for themselves.
+
+
+
+# HDFury Virtex2 auto config generator
+
+If you have a HDFury Virtex2 you can automate the metadata generation. For this to work you need
+to place the device before the input to the capture server (you want to do this anyway because higher end audio is notoriously poor though such setups). This way the device will see the same HDR meta data as the capture card and the filter can inject the correct metadata in the DirectShow stream. 
+
+The config is re-generated every few seconds and a quick stop-start will reload everything and get you the right parameters (after a menu-switch or a new movie starts for example).
+
+Installation and use:
 
 * Install Python
 * Install python/requirements.txt modules
 * Run hdfury_virtex2_ini_generator.py <ip of vertex2> <directshow_metadata_injector_filter.ini file from above>
 
-## Poor mans' madVRlabs Envy?
-
-Schematically this looks like: source (Apple TV4k or blueray player) -> HDFurty Vertex2 -> HTPC (madVR, nvidia GPU, capture card) -> display
-
-Notes:
- * The sound you want to run off of the Vertex2 split to a processor/receiver if you plan on running any sort of interesting format like Atmos. Beware that delay might be high (>200ms) so get one that can handle it.
- * Note that in some jurisdictions it's allowed to remove HDCP for the right reasons. This is not hard, but figuring out how to do this is left as an exercise to the reader.
- * The hdfury_virtex2_ini_generator.py connects to the fury and updates the filter's config ever 10 seconds. A stop-start of the stream in potplayer will engage the new settings.
-
-If you like this, and have the means, please buy a real [envy](https://madvrenvy.com/) to support further madVR development. It is really, really a much better experience.
-
-## Configuration
-
-Configuration is via a .ini file which contains all the settings. There is an example_config.ini. Copy that to the same location as where you downloaded the .ax file and rename to directshow_metadata_injector_filter.ini.
-
-There is a small Python program included in the python/ subdir which can automatically generate this file for a range of devices. For this to work you need
-to place the device before the input to the capture server (you want to do this anyway because higher end audio is notriously poor though such setups). This 
-way the device will see the same HDR meta data as the capture card and the filter can inject the correct metadata in the directshow stream. The config is 
-re-generated every few seconds and a quick stop-start will reload everything and get you the right parameters (after a menu-switch or a new movie starts for 
-example).
-
-Supported devices:
-
- * HDFury Vertex2
 
 
-## Build
+
+# Build
 
 **C++**: Open with Visual Studio 2019 VC++, should just work out of the box.
 
 **Python**: Just have a python 3.x interpretor and install the packages mentioned in requirements.txt
 
-## FAQ
+# FAQ
 
-Is this plug and play? No, because this filter does not offer anything new to get an video stream decoded it will not automatically be added to a DirectShow graph. It needs to be forced to be included, see install for an example.
+**Is this plug and play?** 
+No, because this filter does not offer anything new to get an video stream decoded it will not automatically be added to a DirectShow graph. It needs to be forced to be included, see install for an example.
+
+**After starting the video the screen remains black**
+This happens if there is another filter in between this filter and madVR. At that point the filter can't get memory for sending the metadata and will not copy the image data as well. Fix your graph/player.
+
+
 
 ## Credits
 

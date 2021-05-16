@@ -5,7 +5,8 @@
 
 #include "metadata_injector_interface.h"
 
-class MetadataInjectorProperties: 
+
+class MetadataInjectorProperties:
     public CBasePropertyPage
 {
 

@@ -1,0 +1,11 @@
+0.1.0
+ - Fix for min/max inversion in mastering luminance
+ - Now pushing metadata once per second to madVR resolving issues with it not being picked up
+ - Verified to work with madVR beta 131
+ 
+0.0.2
+- Added config file to set parameters
+- Added HDFury Vertex2 auto config file param generator
+
+0.0.1
+ - First release

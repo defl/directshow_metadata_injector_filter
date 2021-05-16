@@ -65,7 +65,7 @@ CFactoryTemplate g_Templates[] = {
       &CLSID_METADATA_INJECTOR_FILTER,
       MetadataInjectorFilter::CreateInstance,
       NULL,
-      &sMIPSetup 
+      &sMIPSetup
     },
     {
       L"Metadata Injector Properties",
@@ -120,43 +120,38 @@ HRESULT MetadataInjectorFilter::Transform(IMediaSample* pIn, IMediaSample* pOut)
     if (FAILED(hr))
         return hr;
 
-    if(mSendSideData)
+    // Update once per second
+    if ((mFrameCounter % mFramesPerSecond) == 0)
     {
+        // This can fail if you have a filter behind this which does not understand side data (ie, it's not going directly to madVR)
         IMediaSideData* pMediaSideData = nullptr;
         if (FAILED(hr = pOut->QueryInterface(&pMediaSideData)))
             return hr;
-         
-        {
-            MediaSideDataHDR hdr;
-            ZeroMemory(&hdr, sizeof(hdr));
 
-            hdr.display_primaries_x[0] = mDisplayPrimaryGreenX;
-            hdr.display_primaries_x[1] = mDisplayPrimaryBlueX;
-            hdr.display_primaries_x[2] = mDisplayPrimaryRedX;
-            hdr.display_primaries_y[0] = mDisplayPrimaryGreenY;
-            hdr.display_primaries_y[1] = mDisplayPrimaryBlueY;
-            hdr.display_primaries_y[2] = mDisplayPrimaryRedY;
+        MediaSideDataHDR hdr;
+        ZeroMemory(&hdr, sizeof(hdr));
+        hdr.display_primaries_x[0] = mDisplayPrimaryGreenX;
+        hdr.display_primaries_x[1] = mDisplayPrimaryBlueX;
+        hdr.display_primaries_x[2] = mDisplayPrimaryRedX;
+        hdr.display_primaries_y[0] = mDisplayPrimaryGreenY;
+        hdr.display_primaries_y[1] = mDisplayPrimaryBlueY;
+        hdr.display_primaries_y[2] = mDisplayPrimaryRedY;
+        hdr.white_point_x = mWhitePointX;
+        hdr.white_point_y = mWhitePointY;
+        hdr.max_display_mastering_luminance = mMasteringLuminanceMax;
+        hdr.min_display_mastering_luminance = mMasteringLuminanceMin;
+        pMediaSideData->SetSideData(IID_MediaSideDataHDR, (const BYTE*)&hdr, sizeof(hdr));
 
-            hdr.white_point_x = mWhitePointX;
-            hdr.white_point_y = mWhitePointY;
-
-            hdr.max_display_mastering_luminance = mMasteringLuminanceMax;
-            hdr.min_display_mastering_luminance = mMasteringLuminanceMin;
-            pMediaSideData->SetSideData(IID_MediaSideDataHDR, (const BYTE*)&hdr, sizeof(hdr));
-        }
-
-        {
-            MediaSideDataHDRContentLightLevel hdrLightLevel;
-            hdrLightLevel.MaxCLL = mMaxCLL;
-            hdrLightLevel.MaxFALL = mMaxFALL;
-
-            pMediaSideData->SetSideData(IID_MediaSideDataHDRContentLightLevel, (const BYTE*)&hdrLightLevel, sizeof(hdrLightLevel));
-        }
+        MediaSideDataHDRContentLightLevel hdrLightLevel;
+        ZeroMemory(&hdrLightLevel, sizeof(hdrLightLevel));
+        hdrLightLevel.MaxCLL = mMaxCLL;
+        hdrLightLevel.MaxFALL = mMaxFALL;
+        pMediaSideData->SetSideData(IID_MediaSideDataHDRContentLightLevel, (const BYTE*)&hdrLightLevel, sizeof(hdrLightLevel));
 
         pMediaSideData->Release();
-        mSendSideData = false;
     }
 
+    ++mFrameCounter;
     return NOERROR;
 }
 
@@ -348,7 +343,7 @@ HRESULT MetadataInjectorFilter::CheckInputType(const CMediaType* mtIn)
 HRESULT MetadataInjectorFilter::CheckTransform(const CMediaType* mtIn, const CMediaType* mtOut)
 {
     CheckPointer(mtIn, E_POINTER);
-    CheckPointer(mtOut, E_POINTER); 
+    CheckPointer(mtOut, E_POINTER);
 
     return NOERROR;
 }
@@ -379,7 +374,7 @@ HRESULT MetadataInjectorFilter::DecideBufferSize(IMemAllocator* pAlloc, ALLOCATO
 
     ASSERT(Actual.cBuffers == 1);
 
-    if (pProperties->cBuffers > Actual.cBuffers || 
+    if (pProperties->cBuffers > Actual.cBuffers ||
         pProperties->cbBuffer > Actual.cbBuffer)
         return E_FAIL;
 
@@ -399,6 +394,9 @@ HRESULT MetadataInjectorFilter::GetMediaType(int iPosition, CMediaType* pMediaTy
         return VFW_S_NO_MORE_ITEMS;
 
     BuildFakeMediaType(pMediaType);
+
+    const VIDEOINFOHEADER* const pvi = (VIDEOINFOHEADER*)m_pInput->CurrentMediaType().Format();
+    mFramesPerSecond = 1.0 / (pvi->AvgTimePerFrame / 10000000.0);  // time unit is 100ns
 
     return NOERROR;
 }
@@ -444,7 +442,7 @@ STDMETHODIMP MetadataInjectorFilter::GetClassID(CLSID* pClsid)
 HRESULT MetadataInjectorFilter::ScribbleToStream(IStream* pStream)
 {
     HRESULT hr = pStream->Write(mConfigFilename.c_str(), mConfigFilename.length() + 1, NULL);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
         return hr;
 
     return NOERROR;
@@ -495,10 +493,10 @@ void MetadataInjectorFilter::BuildFakeMediaType(CMediaType* pMediaType)
     pvi2->dwPictAspectRatioX = mAspectRatioX;
     pvi2->dwPictAspectRatioY = mAspectRatioY;
 
-    // dwControlFlags is a 32bit int. With AMCONTROL_COLORINFO_PRESENT the upper 24 bits are used by DXVA_ExtendedFormat. 
-    // That struct is 32 bits so it's lower member (SampleFormat) is actually overbooked with the value of dwConotrolFlags 
-    // so can't be used. LAV has defined some out-of-spec but compatile with madVR values for the more modern formats, 
-    // which we use as well see 
+    // dwControlFlags is a 32bit int. With AMCONTROL_COLORINFO_PRESENT the upper 24 bits are used by DXVA_ExtendedFormat.
+    // That struct is 32 bits so it's lower member (SampleFormat) is actually overbooked with the value of dwConotrolFlags
+    // so can't be used. LAV has defined some out-of-spec but compatile with madVR values for the more modern formats,
+    // which we use as well see
     // https://github.com/Nevcairiel/LAVFilters/blob/ddef56ae155d436f4301346408f4fdba755197d6/decoder/LAVVideo/Media.cpp
 
     DXVA_ExtendedFormat* colorimetry = (DXVA_ExtendedFormat*)&(pvi2->dwControlFlags);
